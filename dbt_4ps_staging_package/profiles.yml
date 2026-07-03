@@ -1,0 +1,12 @@
+databricks:
+  outputs:
+    source:
+      type: databricks
+      catalog: "{{ env_var('DBT_DATABRICKS_CATALOG') }}"
+      host: "{{ env_var('DBT_DATABRICKS_HOST') }}"
+      http_path: "{{ env_var('DBT_DATABRICKS_HTTP_PATH') }}"
+      schema: "4ps_source"
+      auth_type: token
+      token: "{{ env_var('DBT_DATABRICKS_TOKEN') }}"
+      threads: 32
+  target: source

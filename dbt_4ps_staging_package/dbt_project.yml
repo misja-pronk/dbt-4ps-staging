@@ -1,0 +1,26 @@
+name: 'dbt_4ps_staging'
+version: '1.0.0'
+
+profile: 'databricks'
+
+model-paths: [ "models" ]
+test-paths: [ "tests" ]
+
+flags:
+  use_materialization_v2: true
+
+clean-targets:
+- "target"
+- "dbt_packages"
+
+# Override these vars in your own project or with --vars to point at your
+# environment. `source` locates the Unity Catalog volume holding the bc2adls
+# export; `destination` is where the streaming tables are created.
+vars:
+  source:
+    database: my_catalog
+    schema: bc2adls
+    volume: bc2adls_deltas
+  destination:
+    database: my_catalog
+    schema: staging

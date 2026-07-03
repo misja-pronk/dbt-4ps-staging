@@ -1,0 +1,27 @@
+[project]
+name = "dbt_4ps_staging_generator"
+version = "0.1.0"
+description = "Generate dbt staging models for 4PS Construct (Business Central) from bc2adls CDM manifests"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "databricks-sdk>=0.50.0",
+    "humps>=0.2.2",
+    "pydantic>=2.11.3",
+    "pyyaml>=6.0.2",
+    "rich>=13.0.0",
+    "shandy-sqlfmt[jinjafmt]>=0.26.0",
+    "sqlglot>=26.15.0",
+    "typer>=0.15.2",
+]
+
+[project.scripts]
+dbt-4ps-generator = "main:app"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

@@ -1,0 +1,126 @@
+{
+  "jsonSchemaSemanticVersion": "1.0.0",
+  "imports": [],
+  "manifestName": "deltas-manifest",
+  "explanation": "Data exported from the Business Central to the Azure Data Lake Storage",
+  "entities": [
+    {
+      "type": "LocalEntity",
+      "entityName": "PaymentTerms-3",
+      "entityPath": "PaymentTerms-3.cdm.json/PaymentTerms-3",
+      "dataPartitionPatterns": [
+        {
+          "name": "PaymentTerms-3",
+          "rootLocation": "deltas/PaymentTerms-3",
+          "globPattern": "/*.csv",
+          "exhibitsTraits": [
+            {
+              "traitReference": "is.partition.format.CSV",
+              "arguments": [
+                {
+                  "name": "columnHeaders",
+                  "value": "true"
+                },
+                {
+                  "name": "delimiter",
+                  "value": ","
+                },
+                {
+                  "name": "escape",
+                  "value": "\\"
+                },
+                {
+                  "name": "encoding",
+                  "value": "utf-8"
+                },
+                {
+                  "name": "quote",
+                  "value": "\""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "LocalEntity",
+      "entityName": "Currency-4",
+      "entityPath": "Currency-4.cdm.json/Currency-4",
+      "dataPartitionPatterns": [
+        {
+          "name": "Currency-4",
+          "rootLocation": "deltas/Currency-4",
+          "globPattern": "/*.csv",
+          "exhibitsTraits": [
+            {
+              "traitReference": "is.partition.format.CSV",
+              "arguments": [
+                {
+                  "name": "columnHeaders",
+                  "value": "true"
+                },
+                {
+                  "name": "delimiter",
+                  "value": ","
+                },
+                {
+                  "name": "escape",
+                  "value": "\\"
+                },
+                {
+                  "name": "encoding",
+                  "value": "utf-8"
+                },
+                {
+                  "name": "quote",
+                  "value": "\""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "LocalEntity",
+      "entityName": "Customer-18",
+      "entityPath": "Customer-18.cdm.json/Customer-18",
+      "dataPartitionPatterns": [
+        {
+          "name": "Customer-18",
+          "rootLocation": "deltas/Customer-18",
+          "globPattern": "/*.csv",
+          "exhibitsTraits": [
+            {
+              "traitReference": "is.partition.format.CSV",
+              "arguments": [
+                {
+                  "name": "columnHeaders",
+                  "value": "true"
+                },
+                {
+                  "name": "delimiter",
+                  "value": ","
+                },
+                {
+                  "name": "escape",
+                  "value": "\\"
+                },
+                {
+                  "name": "encoding",
+                  "value": "utf-8"
+                },
+                {
+                  "name": "quote",
+                  "value": "\""
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relationships": []
+}

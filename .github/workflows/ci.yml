@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  generator-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt_4ps_staging_generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run pytest
+
+  dbt-parse:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt_4ps_staging_package
+    env:
+      DBT_DATABRICKS_HOST: dummy.azuredatabricks.net
+      DBT_DATABRICKS_HTTP_PATH: /sql/1.0/warehouses/dummy
+      DBT_DATABRICKS_CATALOG: dummy
+      DBT_DATABRICKS_TOKEN: dummy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run dbt deps --profiles-dir .
+      - run: uv run dbt parse --profiles-dir .

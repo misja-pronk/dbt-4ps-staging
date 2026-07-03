@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+
+# dbt
+target/
+dbt_packages/
+logs/
+.user.yml
