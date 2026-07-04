@@ -1,6 +1,7 @@
-from pydantic import BaseModel
-from typing import Self, List, Union
 from pathlib import Path
+from typing import Self
+
+from pydantic import BaseModel
 
 
 class Option(BaseModel):
@@ -13,18 +14,16 @@ class Option(BaseModel):
 
 class RowFilter(BaseModel):
     func_name: str
-    other_column_names: List[str]
+    other_column_names: list[str]
 
     def to_sql(self) -> str:
-        _row_filter = (
-            f"ROW FILTER {self.func_name} ON ({', '.join(self.other_column_names)})"
-        )
+        _row_filter = f"ROW FILTER {self.func_name} ON ({', '.join(self.other_column_names)})"
         return _row_filter
 
 
 class Mask(BaseModel):
     func_name: str
-    other_column_names: List[str] = []
+    other_column_names: list[str] = []
 
     def to_sql(self) -> str:
         _mask = f"MASK {self.func_name}"
@@ -34,7 +33,7 @@ class Mask(BaseModel):
 
 
 class Property:
-    def __init__(self, key: str, value: Union[bool, str, int, float]):
+    def __init__(self, key: str, value: bool | str | int | float):
         self.key = key
         self.value = value
 
@@ -95,9 +94,7 @@ class Schedule:
         elif self.time_unit and self.integer_value:
             _schedule += f"EVERY {self.integer_value} {self.time_unit}"
         else:
-            raise Exception(
-                "Either cron_string or time_unit and integer_value must be provided!"
-            )
+            raise Exception("Either cron_string or time_unit and integer_value must be provided!")
 
         return _schedule
 
@@ -106,13 +103,13 @@ class StreamingTableBuilder:
     def __init__(self):
         self._name: str = None
         self._comment: str = None
-        self._columns: List[Column] = []
-        self._properties: List[Property] = []
-        self._clustered_by: List[str] = []
+        self._columns: list[Column] = []
+        self._properties: list[Property] = []
+        self._clustered_by: list[str] = []
         self._schedule: Schedule = None
         self._path: Path = None
-        self._options: List[Option] = []
-        self._row_filter: List[RowFilter] = None
+        self._options: list[Option] = []
+        self._row_filter: list[RowFilter] = None
         self._format: str = None
 
     def format(self, format: str) -> Self:
@@ -127,7 +124,8 @@ class StreamingTableBuilder:
             "xml",
         ]:
             raise Exception(
-                f"Invalid format: {format} allowed only: avro, binaryFile, csv, json, orc, parquet, text, or xml"
+                f"Invalid format: {format} allowed only: "
+                "avro, binaryFile, csv, json, orc, parquet, text, or xml"
             )
 
         self._format = format
@@ -145,7 +143,7 @@ class StreamingTableBuilder:
         self._options.append(option)
         return self
 
-    def add_options(self, options: List[Option]) -> Self:
+    def add_options(self, options: list[Option]) -> Self:
         self._options.extend(options)
         return self
 
@@ -169,7 +167,7 @@ class StreamingTableBuilder:
         self._properties.append(property)
         return self
 
-    def add_properties(self, properties: List[Property]) -> Self:
+    def add_properties(self, properties: list[Property]) -> Self:
         self._properties.extend(properties)
         return self
 
@@ -177,8 +175,8 @@ class StreamingTableBuilder:
         _table_specification = f"({', '.join([c.to_sql() for c in self._columns])})"
         return _table_specification
 
-    def add_row_filter(self, func_name: str, columns: List[str] = []) -> Self:
-        _columns = ", ".join(columns)
+    def add_row_filter(self, func_name: str, columns: list[str] | None = None) -> Self:
+        _columns = ", ".join(columns or [])
         _row_filer = f"ROW FILTER {func_name} ON ({_columns})"
         self._row_filter = _row_filer
         return self
@@ -195,9 +193,7 @@ class StreamingTableBuilder:
             _table_clauses += f" COMMENT '{self._comment}'"
 
         if self._properties:
-            _table_clauses += (
-                f" WITH ({', '.join(p.to_sql() for p in self._properties)})"
-            )
+            _table_clauses += f" WITH ({', '.join(p.to_sql() for p in self._properties)})"
 
         if self._schedule:
             _table_clauses += f" SCHEDULE REFRESH {self._schedule.to_sql()}"
@@ -209,9 +205,7 @@ class StreamingTableBuilder:
 
     def _query(self) -> str:
         _path = self._path
-        _schema = (
-            f"schema => '{', '.join([f'`{c.name}` {c.type}' for c in self._columns])}'"
-        )
+        _schema = f"schema => '{', '.join([f'`{c.name}` {c.type}' for c in self._columns])}'"
         _options = ", ".join([o.to_sql() for o in self._options])
         _query = f"SELECT * FROM STREAM READ_FILES('{_path}', {_schema}, {_options})"
         return _query
@@ -221,5 +215,8 @@ class StreamingTableBuilder:
         return self
 
     def build(self) -> str:
-        _streaming_table = f"CREATE OR REFRESH STREAMING TABLE `{self._name}` {self._table_specification()} {self._table_clauses()} AS {self._query()}"
+        _streaming_table = (
+            f"CREATE OR REFRESH STREAMING TABLE `{self._name}` "
+            f"{self._table_specification()} {self._table_clauses()} AS {self._query()}"
+        )
         return _streaming_table

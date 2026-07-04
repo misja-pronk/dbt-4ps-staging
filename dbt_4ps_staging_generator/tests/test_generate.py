@@ -89,8 +89,10 @@ def test_generate_end_to_end(tmp_path):
         app,
         [
             "generate",
-            "--manifest", str(manifest_path),
-            "--output-directory", str(output_directory),
+            "--manifest",
+            str(manifest_path),
+            "--output-directory",
+            str(output_directory),
         ],
     )
     assert result.exit_code == 0, result.output
@@ -121,8 +123,10 @@ def test_generate_without_file_metadata_column(tmp_path):
         app,
         [
             "generate",
-            "--manifest", str(manifest_path),
-            "--output-directory", str(output_directory),
+            "--manifest",
+            str(manifest_path),
+            "--output-directory",
+            str(output_directory),
             "--no-file-metadata-column",
         ],
     )

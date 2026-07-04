@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on:
   push:
@@ -6,18 +6,39 @@ on:
   pull_request:
 
 jobs:
-  generator-tests:
+  lint:
+    name: lint + format
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: dbt_4ps_staging_generator
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - run: uv sync
+      - name: Lint (ruff)
+        run: uv run ruff check .
+      - name: Format check (ruff)
+        run: uv run ruff format --check .
+
+  generator-tests:
+    name: generator tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dbt_4ps_staging_generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - run: uv sync
       - run: uv run pytest
 
   dbt-parse:
+    name: dbt parse
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -29,7 +50,29 @@ jobs:
       DBT_DATABRICKS_TOKEN: dummy
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - run: uv sync
       - run: uv run dbt deps --profiles-dir .
       - run: uv run dbt parse --profiles-dir .
+
+  regeneration-in-sync:
+    name: generated models in sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Regenerate the example entities
+        working-directory: dbt_4ps_staging_generator
+        run: |
+          uv run python main.py generate \
+            --manifest ../_cdm/deltas.manifest.cdm.json \
+            --output-directory /tmp/regenerated
+      - name: Compare against the committed models
+        run: |
+          for f in /tmp/regenerated/*.sql; do
+            diff "$f" "dbt_4ps_staging_package/models/staging/4ps/$(basename "$f")"
+          done

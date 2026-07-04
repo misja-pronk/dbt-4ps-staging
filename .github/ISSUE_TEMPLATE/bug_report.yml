@@ -1,0 +1,37 @@
+name: Bug report
+description: Something isn't working
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `uv run python main.py generate --manifest ...`
+        2. ...
+  - type: textarea
+    id: cdm
+    attributes:
+      label: CDM snippet
+      description: >
+        If the generator mishandles your export, paste the relevant part of the
+        manifest or entity .cdm.json (it contains only schema metadata, no data —
+        but do check before pasting).
+      render: json
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.13"
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output
+      render: text

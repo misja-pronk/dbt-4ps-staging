@@ -21,7 +21,21 @@ dbt-4ps-generator = "main:app"
 [dependency-groups]
 dev = [
     "pytest>=8.0.0",
+    "ruff>=0.6",
 ]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# typer's idiom puts typer.Option(...) in argument defaults
+"main.py" = ["B008"]

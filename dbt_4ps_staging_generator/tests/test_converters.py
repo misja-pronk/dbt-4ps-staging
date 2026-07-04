@@ -15,10 +15,16 @@ class TestToSnakeCase:
 
     def test_splits_camel_case(self):
         assert to_snake_case_with_column_number_removed("SearchName") == "search_name"
-        assert to_snake_case_with_column_number_removed("GlobalDimension1Code") == "global_dimension_1_code"
+        assert (
+            to_snake_case_with_column_number_removed("GlobalDimension1Code")
+            == "global_dimension_1_code"
+        )
 
     def test_acronyms(self):
-        assert to_snake_case_with_column_number_removed("VATRegistrationNo-86") == "vat_registration_no"
+        assert (
+            to_snake_case_with_column_number_removed("VATRegistrationNo-86")
+            == "vat_registration_no"
+        )
         assert to_snake_case_with_column_number_removed("GLN-90") == "gln"
 
     def test_plain_word(self):
@@ -99,7 +105,9 @@ class TestAttributeToColumn:
                 "arguments": [{"name": "scale", "value": 5}],
             }
         ]
-        column = attribute_to_column(make_attribute("Decimal", maximum_length=12, applied_traits=traits))
+        column = attribute_to_column(
+            make_attribute("Decimal", maximum_length=12, applied_traits=traits)
+        )
         assert column.type == "decimal(12,5)"
 
     def test_decimal_without_scale(self):

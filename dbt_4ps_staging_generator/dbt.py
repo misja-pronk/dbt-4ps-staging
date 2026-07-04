@@ -1,17 +1,20 @@
-from sql import Column, Option
+from collections.abc import Callable
 from pathlib import Path
-from typing import Self, List, Callable
+from typing import Self
+
 import yaml
-from sqlfmt.api import format_string, Mode
+from sqlfmt.api import Mode, format_string
 from sqlfmt.exception import SqlfmtError
+
+from sql import Column, Option
 
 
 class ModelBuilder:
     def __init__(self):
         self._name: str = None
-        self._columns: List[Column] = []
+        self._columns: list[Column] = []
         self._path: Path = None
-        self._options: List[Option] = []
+        self._options: list[Option] = []
         self._format: str = None
         self._rename_function: Callable[[str], str] = lambda x: x
         self._add_file_metadata_column: bool = False
@@ -55,7 +58,8 @@ class ModelBuilder:
             "xml",
         ]:
             raise Exception(
-                f"Invalid format: {format} allowed only: avro, binaryFile, csv, json, orc, parquet, text, or xml"
+                f"Invalid format: {format} allowed only: "
+                "avro, binaryFile, csv, json, orc, parquet, text, or xml"
             )
 
         self._format = format
@@ -76,7 +80,7 @@ class ModelBuilder:
         self._options.append(option)
         return self
 
-    def add_options(self, options: List[Option]) -> Self:
+    def add_options(self, options: list[Option]) -> Self:
         self._options.extend(options)
         return self
 
@@ -93,33 +97,35 @@ class ModelBuilder:
         self._path = path
         return self
 
-    def get_column_names(self, filter_function: Callable[[Column], bool] = lambda c: True) -> List[str]:
-        return [
-            c.name for c in self._columns if filter_function(c)
-        ]
-    
-    def get_column_display_names(self) -> List[str]:
-        return [
-            c.display_name for c in self._columns
-        ]
-        
-    def get_renamed_column_names(self, filter_function: Callable[[Column], bool] = lambda c: True) -> List[str]:
+    def get_column_names(
+        self, filter_function: Callable[[Column], bool] = lambda c: True
+    ) -> list[str]:
+        return [c.name for c in self._columns if filter_function(c)]
+
+    def get_column_display_names(self) -> list[str]:
+        return [c.display_name for c in self._columns]
+
+    def get_renamed_column_names(
+        self, filter_function: Callable[[Column], bool] = lambda c: True
+    ) -> list[str]:
         column_names = self.get_column_names(filter_function=filter_function)
         renamed_column_names = []
 
-        for column_name in column_names:    
+        for column_name in column_names:
             _renamed_column = self._rename_function(column_name)
             if _renamed_column in renamed_column_names:
-                renamed_column_names.append(f"{_renamed_column}_{renamed_column_names.count(_renamed_column)}")
+                renamed_column_names.append(
+                    f"{_renamed_column}_{renamed_column_names.count(_renamed_column)}"
+                )
             else:
                 renamed_column_names.append(_renamed_column)
-            
-        return renamed_column_names
 
+        return renamed_column_names
 
     def _select_list(self) -> str:
         select_list = [
-            f"`{c}` as `{rc}`" for c, rc in zip(self.get_column_names(), self.get_renamed_column_names())
+            f"`{c}` as `{rc}`"
+            for c, rc in zip(self.get_column_names(), self.get_renamed_column_names(), strict=True)
         ]
 
         if self._add_file_metadata_column:
@@ -132,9 +138,7 @@ class ModelBuilder:
 
     def _read_files(self) -> str:
         _path = self._path
-        _schema = (
-            f"schema => '{', '.join([f'`{c.name}` {c.type}' for c in self._columns])}'"
-        )
+        _schema = f"schema => '{', '.join([f'`{c.name}` {c.type}' for c in self._columns])}'"
         _options = ", ".join([f"{o.key} => '{o.value}'" for o in self._options])
         _read_files = f"READ_FILES('{_path}', {_schema}, {_options})"
         return _read_files
@@ -156,7 +160,7 @@ class ModelBuilder:
 class ModelsSchemaBuilder:
     def __init__(self):
         self._name: str = None
-        self._model_builders: List[ModelBuilder] = []
+        self._model_builders: list[ModelBuilder] = []
         self._output_directory: Path = None
         self._prefix: str = None
 
@@ -187,9 +191,11 @@ class ModelsSchemaBuilder:
         models = []
 
         for model_builder in self._model_builders:
-            primary_key_columns = model_builder.get_renamed_column_names(filter_function=lambda c: c.is_primary_key)
+            primary_key_columns = model_builder.get_renamed_column_names(
+                filter_function=lambda c: c.is_primary_key
+            )
             tests = []
-            
+
             if primary_key_columns:
                 tests.append(
                     {
@@ -204,7 +210,11 @@ class ModelsSchemaBuilder:
                     "name": name,
                     "description": description,
                 }
-                for name, description in zip(model_builder.get_renamed_column_names(), model_builder.get_column_display_names())
+                for name, description in zip(
+                    model_builder.get_renamed_column_names(),
+                    model_builder.get_column_display_names(),
+                    strict=True,
+                )
             ]
 
             model = {
@@ -213,7 +223,7 @@ class ModelsSchemaBuilder:
                 "config": {
                     "database": r'{{ var("destination")["database"] }}',
                     "schema": r'{{ var("destination")["schema"] }}',
-                    "materialized": "streaming_table"
+                    "materialized": "streaming_table",
                 },
                 "columns": columns,
             }

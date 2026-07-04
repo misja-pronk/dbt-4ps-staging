@@ -1,5 +1,9 @@
 # dbt-4ps-staging
 
+[![ci](https://github.com/misja-pronk/dbt-4ps-staging/actions/workflows/ci.yml/badge.svg)](https://github.com/misja-pronk/dbt-4ps-staging/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 Build a Databricks staging layer for **[4PS Construct](https://www.4ps.nl/)** (Microsoft Dynamics 365 Business Central) data exported with **[bc2adls](https://github.com/Bertverbeek4PS/bc2adls)**.
 
 bc2adls exports Business Central tables as CSV deltas plus [CDM](https://learn.microsoft.com/en-us/common-data-model/) metadata describing every table and column. This repo turns that metadata into a complete [dbt](https://www.getdbt.com/) staging package — one streaming table per source table, with typed columns, readable snake_case names, column documentation, and primary-key uniqueness tests — so you never hand-write staging models again.
@@ -43,6 +47,11 @@ Each generated model reads the CSV deltas for one table with Databricks `READ_FI
    ```
 
 3. Configure and run the dbt package — see [dbt_4ps_staging_package/README.md](dbt_4ps_staging_package/README.md).
+
+## Contributing
+
+Issues and PRs are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for the
+toolchain (`mise` + `uv` + `ruff`) and the day-to-day commands.
 
 ## License
 

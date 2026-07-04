@@ -1,0 +1,53 @@
+[tools]
+python = "3.13"
+uv = "latest"
+
+[env]
+UV_PROJECT_ENVIRONMENT = ".venv"
+
+# ── tasks ──────────────────────────────────────────────────────────────────
+# Run with `mise run <name>` (or `mise <name>`); list them with `mise tasks`.
+
+[tasks.generate]
+description = "Regenerate the dbt models from the example CDM manifest"
+dir = "dbt_4ps_staging_generator"
+run = """
+uv run python main.py generate \
+  --manifest ../_cdm/deltas.manifest.cdm.json \
+  --output-directory ../dbt_4ps_staging_package/models/staging/4ps
+"""
+
+[tasks.test]
+description = "Run the generator test suite (pytest)"
+alias = "t"
+dir = "dbt_4ps_staging_generator"
+run = "uv run pytest"
+
+[tasks.lint]
+description = "Lint the generator with ruff"
+dir = "dbt_4ps_staging_generator"
+run = "uv run ruff check ."
+
+[tasks.fmt]
+description = "Auto-format the generator with ruff"
+alias = "format"
+dir = "dbt_4ps_staging_generator"
+run = "uv run ruff format ."
+
+[tasks.check]
+description = "Full pre-commit gate: lint + format check + tests"
+dir = "dbt_4ps_staging_generator"
+run = [
+    "uv run ruff check .",
+    "uv run ruff format --check .",
+    "uv run pytest",
+]
+
+[tasks."dbt:parse"]
+description = "Validate the dbt package parses (uses dummy connection env vars)"
+dir = "dbt_4ps_staging_package"
+env = { DBT_DATABRICKS_HOST = "dummy.azuredatabricks.net", DBT_DATABRICKS_HTTP_PATH = "/sql/1.0/warehouses/dummy", DBT_DATABRICKS_CATALOG = "dummy", DBT_DATABRICKS_TOKEN = "dummy" }
+run = [
+    "uv run dbt deps --profiles-dir .",
+    "uv run dbt parse --profiles-dir .",
+]

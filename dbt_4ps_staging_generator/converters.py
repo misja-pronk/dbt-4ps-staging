@@ -1,18 +1,22 @@
-from cdm import Argument, Attribute
-from sql import Option, Column
 import re
+
+from cdm import Argument, Attribute
+from sql import Column, Option
 
 
 def to_snake_case_with_column_number_removed(input_string):
     # Remove trailing hyphen + digits first
-    input_string = re.sub(r'[-_]\d+$', '', input_string)
-    
+    input_string = re.sub(r"[-_]\d+$", "", input_string)
+
     # Find all words correctly
-    words = re.findall(r'(?:[A-Z]+(?=[A-Z][a-z]))|(?:[A-Z]?[a-z]+)|(?:[A-Z]+)|(?:\d+)', input_string)
-    
+    words = re.findall(
+        r"(?:[A-Z]+(?=[A-Z][a-z]))|(?:[A-Z]?[a-z]+)|(?:[A-Z]+)|(?:\d+)", input_string
+    )
+
     # Join with underscores and lowercase
-    to_snake_case = '_'.join(map(str.lower, words))
+    to_snake_case = "_".join(map(str.lower, words))
     return to_snake_case
+
 
 def trait_reference_to_format(trait_reference: str):
     return trait_reference.split(".")[-1].lower()
@@ -90,9 +94,17 @@ def attribute_to_column(attribute: Attribute) -> Column:
         case _:
             type = "string"
 
-    return Column(name=attribute.name, type=type, display_name=attribute.display_name, is_primary_key=attribute.is_primary_key)
+    return Column(
+        name=attribute.name,
+        type=type,
+        display_name=attribute.display_name,
+        is_primary_key=attribute.is_primary_key,
+    )
 
 
 def construct_path(root_location: str, glob_pattern: str) -> str:
-    volume = r'/Volumes/{{ var("source")["database"] }}/{{ var("source")["schema"] }}/{{ var("source")["volume"] }}'
+    volume = (
+        r'/Volumes/{{ var("source")["database"] }}'
+        r'/{{ var("source")["schema"] }}/{{ var("source")["volume"] }}'
+    )
     return f"{volume}/{root_location}{glob_pattern}"

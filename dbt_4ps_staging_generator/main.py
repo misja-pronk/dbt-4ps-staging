@@ -57,7 +57,9 @@ def generate(
             .add_options([argument_to_option(a) for a in entity.arguments])
             .format(trait_reference_to_format(entity.trait_reference))
             .add_columns([attribute_to_column(a) for a in entity.attributes])
-            .path(construct_path(root_location=entity.root_location, glob_pattern=entity.glob_pattern))
+            .path(
+                construct_path(root_location=entity.root_location, glob_pattern=entity.glob_pattern)
+            )
             .add_file_metadata_column(file_metadata_column)
             .output_directory(output_directory)
             .build()
