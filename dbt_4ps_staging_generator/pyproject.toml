@@ -1,6 +1,6 @@
 [project]
 name = "dbt-4ps-generator"
-version = "0.1.0"
+version = "0.1.1"
 description = "Generate dbt staging models for 4PS Construct (Business Central) from bc2adls CDM manifests"
 readme = "README.md"
 license = "MIT"

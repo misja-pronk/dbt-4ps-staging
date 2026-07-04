@@ -5,6 +5,8 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-07-04
+
 ### Added
 
 - The generator is now an installable package, `dbt-4ps-generator`, published
@@ -22,6 +24,12 @@ All notable changes to this project are documented here. The format is based on
 - `mise` tasks for the common workflows (`test`, `lint`, `fmt`, `typecheck`,
   `check`, `generate`, `dbt:parse`, `docs`, `build`).
 - Contributing guide, security policy, issue/PR templates.
+
+### Fixed
+
+- Package license metadata: 0.1.0 shipped to PyPI as a wheel only because the
+  sdist's `License-File` pointed outside the package; the license is now
+  bundled and both artifacts publish.
 
 ## [0.1.0] - 2026-07-04
 
