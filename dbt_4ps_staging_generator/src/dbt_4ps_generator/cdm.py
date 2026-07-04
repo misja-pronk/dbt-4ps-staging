@@ -47,7 +47,7 @@ class ManifestEntity(BaseModel):
         trait_reference = self.data_partition_patterns[0].exhibits_traits[0].trait_reference
         return trait_reference
 
-    def get_arguments(self) -> list[dict]:
+    def get_arguments(self) -> list[Argument]:
         arguments = self.data_partition_patterns[0].exhibits_traits[0].arguments
         return arguments
 
@@ -72,7 +72,7 @@ class Attribute(BaseModel):
     applied_traits: list[AppliedTrait] = Field(default=[], alias="appliedTraits")
     display_name: str = Field(alias="displayName")
     maximum_length: int | None = Field(alias="maximumLength")
-    is_primary_key: bool | None = Field(default=False, alias="isPrimaryKey")
+    is_primary_key: bool = Field(default=False, alias="isPrimaryKey")
 
 
 class Definition(BaseModel):

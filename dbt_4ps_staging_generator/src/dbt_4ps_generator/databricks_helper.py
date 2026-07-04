@@ -14,8 +14,12 @@ def download_cdm_files_from_databricks_volume(volume_path: str, download_folder:
     download_folder.mkdir(parents=True, exist_ok=True)
 
     for directory_entry in w.files.list_directory_contents(volume_path):
-        if not directory_entry.is_directory and directory_entry.name.endswith(".json"):
-            print(directory_entry.path)
-            resp = w.files.download(directory_entry.path)
-            download_file = download_folder / Path(directory_entry.name)
-            download_file.write_text(data=str(resp.contents.read(), encoding="utf-8"))
+        name, path = directory_entry.name, directory_entry.path
+        if directory_entry.is_directory or not name or not path or not name.endswith(".json"):
+            continue
+        print(path)
+        resp = w.files.download(path)
+        if resp.contents is None:
+            raise RuntimeError(f"Empty response downloading {path}")
+        download_file = download_folder / Path(name)
+        download_file.write_text(data=str(resp.contents.read(), encoding="utf-8"))

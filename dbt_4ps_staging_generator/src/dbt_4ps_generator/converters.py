@@ -1,7 +1,7 @@
 import re
 
-from cdm import Argument, Attribute
-from sql import Column, Option
+from dbt_4ps_generator.cdm import Argument, Attribute
+from dbt_4ps_generator.sql import Column, Option
 
 
 def to_snake_case_with_column_number_removed(input_string):

@@ -1,5 +1,5 @@
-from cdm import Argument, Attribute
-from converters import (
+from dbt_4ps_generator.cdm import Argument, Attribute
+from dbt_4ps_generator.converters import (
     argument_to_option,
     attribute_to_column,
     construct_path,

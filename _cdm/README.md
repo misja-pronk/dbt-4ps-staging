@@ -13,7 +13,7 @@ Try it:
 
 ```bash
 cd ../dbt_4ps_staging_generator
-uv run python main.py generate \
+uv run dbt-4ps-generator generate \
   --manifest ../_cdm/deltas.manifest.cdm.json \
   --output-directory /tmp/models
 ```
@@ -24,7 +24,7 @@ bc2adls uploads these json files to the same location as the data. If you export
 
 ```bash
 cd ../dbt_4ps_staging_generator
-uv run python main.py download \
+uv run dbt-4ps-generator download \
   --volume-path /Volumes/<catalog>/<schema>/<volume> \
   --output-directory ../_cdm
 ```

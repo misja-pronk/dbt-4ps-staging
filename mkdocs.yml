@@ -1,0 +1,66 @@
+site_name: dbt-4ps-staging
+site_description: Generate a Databricks dbt staging layer for 4PS Construct (Business Central) from bc2adls CDM exports.
+site_author: Misja Pronk
+site_url: https://misja-pronk.github.io/dbt-4ps-staging/
+
+repo_name: misja-pronk/dbt-4ps-staging
+repo_url: https://github.com/misja-pronk/dbt-4ps-staging
+edit_uri: edit/main/docs/
+
+copyright: MIT © Misja Pronk
+
+theme:
+  name: material
+  font: false
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/database-arrow-right
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - navigation.footer
+    - content.code.copy
+    - toc.follow
+    - search.suggest
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.details
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/misja-pronk/dbt-4ps-staging
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Guide:
+      - The generator CLI: generator.md
+      - The dbt package: package.md
+      - CDM metadata: cdm-metadata.md
+  - Develop: development.md

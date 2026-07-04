@@ -1,19 +1,35 @@
+from importlib.metadata import version as pkg_version
 from pathlib import Path
 
 import typer
 
-from cdm import build_entities
-from converters import (
+from dbt_4ps_generator.cdm import build_entities
+from dbt_4ps_generator.converters import (
     argument_to_option,
     attribute_to_column,
     construct_path,
     to_snake_case_with_column_number_removed,
     trait_reference_to_format,
 )
-from databricks_helper import download_cdm_files_from_databricks_volume
-from dbt import ModelBuilder, ModelsSchemaBuilder
+from dbt_4ps_generator.databricks_helper import download_cdm_files_from_databricks_volume
+from dbt_4ps_generator.dbt import ModelBuilder, ModelsSchemaBuilder
 
 app = typer.Typer(help="Generate dbt staging models from bc2adls CDM manifests.")
+
+
+def _version_callback(value: bool):
+    if value:
+        typer.echo(pkg_version("dbt-4ps-generator"))
+        raise typer.Exit()
+
+
+@app.callback()
+def main(
+    version: bool = typer.Option(
+        False, "--version", callback=_version_callback, is_eager=True, help="Show the version."
+    ),
+):
+    pass
 
 
 @app.command()

@@ -1,8 +1,12 @@
 # dbt-4ps-staging
 
 [![ci](https://github.com/misja-pronk/dbt-4ps-staging/actions/workflows/ci.yml/badge.svg)](https://github.com/misja-pronk/dbt-4ps-staging/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/dbt-4ps-generator.svg)](https://pypi.org/project/dbt-4ps-generator/)
+[![Docs](https://img.shields.io/badge/docs-dbt--4ps--staging-blue.svg)](https://misja-pronk.github.io/dbt-4ps-staging/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
+**[Read the docs →](https://misja-pronk.github.io/dbt-4ps-staging/)**
 
 Build a Databricks staging layer for **[4PS Construct](https://www.4ps.nl/)** (Microsoft Dynamics 365 Business Central) data exported with **[bc2adls](https://github.com/Bertverbeek4PS/bc2adls)**.
 
@@ -39,14 +43,17 @@ Each generated model reads the CSV deltas for one table with Databricks `READ_FI
 2. Generate the models (or use the pre-generated package as-is if your table set matches):
 
    ```bash
-   cd dbt_4ps_staging_generator
+   uv tool install dbt-4ps-generator     # or run ephemerally with uvx
+
    export DATABRICKS_HOST=https://<workspace>.azuredatabricks.net
    export DATABRICKS_TOKEN=<token>
-   uv run python main.py download --volume-path /Volumes/<catalog>/<schema>/<volume> --output-directory ../_cdm
-   uv run python main.py generate --manifest ../_cdm/deltas.manifest.cdm.json --output-directory ../dbt_4ps_staging_package/models/staging/4ps
+   dbt-4ps-generator download --volume-path /Volumes/<catalog>/<schema>/<volume> --output-directory ./cdm
+   dbt-4ps-generator generate --manifest ./cdm/deltas.manifest.cdm.json --output-directory dbt_4ps_staging_package/models/staging/4ps
    ```
 
 3. Configure and run the dbt package — see [dbt_4ps_staging_package/README.md](dbt_4ps_staging_package/README.md).
+
+Full walkthrough in the [docs](https://misja-pronk.github.io/dbt-4ps-staging/getting-started/).
 
 ## Contributing
 

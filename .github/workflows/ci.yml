@@ -7,7 +7,7 @@ on:
 
 jobs:
   lint:
-    name: lint + format
+    name: lint + types
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,9 +22,29 @@ jobs:
         run: uv run ruff check .
       - name: Format check (ruff)
         run: uv run ruff format --check .
+      - name: Type check (ty)
+        run: uv run ty check
 
-  generator-tests:
-    name: generator tests
+  test:
+    name: test (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+    defaults:
+      run:
+        working-directory: dbt_4ps_staging_generator
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Tests (pytest)
+        run: uv run --python ${{ matrix.python-version }} pytest
+
+  build:
+    name: build (wheel + sdist)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,8 +54,27 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
-      - run: uv sync
-      - run: uv run pytest
+      - run: uv build
+      - name: Smoke-test the built wheel
+        run: |
+          uv venv /tmp/smoke -p 3.13
+          uv pip install --python /tmp/smoke/bin/python dist/*.whl
+          /tmp/smoke/bin/dbt-4ps-generator --version
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dbt_4ps_staging_generator/dist/*
+
+  docs:
+    name: docs (strict build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+      - name: Build the docs site (strict — broken links/nav fail)
+        run: uv run --project dbt_4ps_staging_generator --group docs mkdocs build --strict
 
   dbt-parse:
     name: dbt parse
@@ -68,7 +107,7 @@ jobs:
       - name: Regenerate the example entities
         working-directory: dbt_4ps_staging_generator
         run: |
-          uv run python main.py generate \
+          uv run dbt-4ps-generator generate \
             --manifest ../_cdm/deltas.manifest.cdm.json \
             --output-directory /tmp/regenerated
       - name: Compare against the committed models

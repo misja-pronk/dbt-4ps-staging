@@ -6,21 +6,21 @@ import yaml
 from sqlfmt.api import Mode, format_string
 from sqlfmt.exception import SqlfmtError
 
-from sql import Column, Option
+from dbt_4ps_generator.sql import Column, Option
 
 
 class ModelBuilder:
     def __init__(self):
-        self._name: str = None
+        self._name: str | None = None
         self._columns: list[Column] = []
-        self._path: Path = None
+        self._path: str | None = None
         self._options: list[Option] = []
-        self._format: str = None
+        self._format: str | None = None
         self._rename_function: Callable[[str], str] = lambda x: x
         self._add_file_metadata_column: bool = False
-        self._description: str = None
-        self._output_directory: Path = None
-        self._prefix: str = None
+        self._description: str | None = None
+        self._output_directory: Path | None = None
+        self._prefix: str | None = None
 
     def add_rename_function(self, rename_function: Callable[[str], str]) -> Self:
         self._rename_function = rename_function
@@ -33,7 +33,7 @@ class ModelBuilder:
         self._add_file_metadata_column = add_file_metadata_column
         return self
 
-    def name(self, name: str, prefix=None) -> Self:
+    def name(self, name: str, prefix: str | None = None) -> Self:
         self._name = name
         self._prefix = prefix
         return self
@@ -85,12 +85,14 @@ class ModelBuilder:
         return self
 
     def get_name(self) -> str:
+        if self._name is None:
+            raise ValueError("name() must be set before building the model")
         if self._prefix:
             return f"{self._prefix}{self._rename_function(self._name)}"
         else:
             return self._rename_function(self._name)
 
-    def get_description(self) -> str:
+    def get_description(self) -> str | None:
         return self._description
 
     def path(self, path: str) -> Self:
@@ -102,7 +104,7 @@ class ModelBuilder:
     ) -> list[str]:
         return [c.name for c in self._columns if filter_function(c)]
 
-    def get_column_display_names(self) -> list[str]:
+    def get_column_display_names(self) -> list[str | None]:
         return [c.display_name for c in self._columns]
 
     def get_renamed_column_names(
@@ -152,6 +154,8 @@ class ModelBuilder:
             print(f"Could not format {self.get_name()}, writing unformatted sql: {e}")
             formatted_query = data
 
+        if self._output_directory is None:
+            raise ValueError("output_directory() must be set before building the model")
         path = self._output_directory / Path(f"{self.get_name()}.sql")
         path.write_text(data=formatted_query)
         return self
@@ -159,17 +163,19 @@ class ModelBuilder:
 
 class ModelsSchemaBuilder:
     def __init__(self):
-        self._name: str = None
+        self._name: str | None = None
         self._model_builders: list[ModelBuilder] = []
-        self._output_directory: Path = None
-        self._prefix: str = None
+        self._output_directory: Path | None = None
+        self._prefix: str | None = None
 
-    def name(self, name: str, prefix=None) -> Self:
+    def name(self, name: str, prefix: str | None = None) -> Self:
         self._name = name
         self._prefix = prefix
         return self
 
     def get_name(self) -> str:
+        if self._name is None:
+            raise ValueError("name() must be set before building the schema")
         if self._prefix:
             return f"{self._prefix}{self._name}"
         else:
@@ -233,6 +239,8 @@ class ModelsSchemaBuilder:
 
         data = {"version": 2, "models": models}
 
+        if self._output_directory is None:
+            raise ValueError("output_directory() must be set before building the schema")
         path = self._output_directory / Path(f"{self.get_name()}.yaml")
         path.write_text(
             data=yaml.dump(

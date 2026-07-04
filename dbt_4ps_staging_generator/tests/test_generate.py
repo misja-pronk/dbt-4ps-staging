@@ -3,7 +3,7 @@ import json
 import yaml
 from typer.testing import CliRunner
 
-from main import app
+from dbt_4ps_generator.cli import app
 
 MANIFEST = {
     "jsonSchemaSemanticVersion": "1.0.0",

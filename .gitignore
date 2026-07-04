@@ -2,6 +2,10 @@
 __pycache__/
 *.py[oc]
 .venv/
+dist/
+
+# mkdocs
+site/
 
 # dbt
 target/

@@ -1,9 +1,21 @@
 [project]
-name = "dbt_4ps_staging_generator"
+name = "dbt-4ps-generator"
 version = "0.1.0"
 description = "Generate dbt staging models for 4PS Construct (Business Central) from bc2adls CDM manifests"
 readme = "README.md"
+license = "MIT"
+license-files = ["../LICENSE"]
+authors = [{ name = "Misja Pronk" }]
 requires-python = ">=3.13"
+keywords = ["dbt", "databricks", "bc2adls", "business-central", "4ps", "cdm"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Database",
+]
 dependencies = [
     "databricks-sdk>=0.50.0",
     "humps>=0.2.2",
@@ -15,27 +27,48 @@ dependencies = [
     "typer>=0.15.2",
 ]
 
+[project.urls]
+Repository = "https://github.com/misja-pronk/dbt-4ps-staging"
+Documentation = "https://misja-pronk.github.io/dbt-4ps-staging/"
+Changelog = "https://github.com/misja-pronk/dbt-4ps-staging/blob/main/CHANGELOG.md"
+
 [project.scripts]
-dbt-4ps-generator = "main:app"
+dbt-4ps-generator = "dbt_4ps_generator.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dbt_4ps_generator"]
 
 [dependency-groups]
 dev = [
     "pytest>=8.0.0",
     "ruff>=0.6",
+    "ty>=0.0.1a1",
+]
+docs = [
+    "mkdocs-material>=9.7.5",
 ]
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
 testpaths = ["tests"]
 addopts = "-q"
 
 [tool.ruff]
 line-length = 100
 target-version = "py313"
+src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [tool.ruff.lint.per-file-ignores]
 # typer's idiom puts typer.Option(...) in argument defaults
-"main.py" = ["B008"]
+"src/dbt_4ps_generator/cli.py" = ["B008"]
+
+[tool.ty.environment]
+python-version = "3.13"
+root = ["src"]
+extra-paths = ["tests"]

@@ -1,4 +1,3 @@
-from pathlib import Path
 from typing import Self
 
 from pydantic import BaseModel
@@ -50,11 +49,11 @@ class Property:
 
 class Column(BaseModel):
     name: str
-    display_name: str = None
+    display_name: str | None = None
     type: str
     is_nullable: bool = True
-    comment: str = None
-    mask: Mask = None
+    comment: str | None = None
+    mask: Mask | None = None
     is_primary_key: bool = False
 
     def to_sql(self) -> str:
@@ -75,10 +74,10 @@ class Column(BaseModel):
 class Schedule:
     def __init__(
         self,
-        cron_string=None,
-        timezone_id=None,
-        time_unit: str = None,
-        integer_value: int = None,
+        cron_string: str | None = None,
+        timezone_id: str | None = None,
+        time_unit: str | None = None,
+        integer_value: int | None = None,
     ):
         self.cron_string = cron_string
         self.timezone_id = timezone_id
@@ -101,16 +100,16 @@ class Schedule:
 
 class StreamingTableBuilder:
     def __init__(self):
-        self._name: str = None
-        self._comment: str = None
+        self._name: str | None = None
+        self._comment: str | None = None
         self._columns: list[Column] = []
         self._properties: list[Property] = []
         self._clustered_by: list[str] = []
-        self._schedule: Schedule = None
-        self._path: Path = None
+        self._schedule: Schedule | None = None
+        self._path: str | None = None
         self._options: list[Option] = []
-        self._row_filter: list[RowFilter] = None
-        self._format: str = None
+        self._row_filter: str | None = None
+        self._format: str | None = None
 
     def format(self, format: str) -> Self:
         if format not in [

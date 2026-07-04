@@ -9,12 +9,13 @@ UV_PROJECT_ENVIRONMENT = ".venv"
 # Run with `mise run <name>` (or `mise <name>`); list them with `mise tasks`.
 
 [tasks.generate]
-description = "Regenerate the dbt models from the example CDM manifest"
+description = "Regenerate the example dbt models (restores the schema yaml — the committed one covers all 73 tables, the example manifest only 3)"
 dir = "dbt_4ps_staging_generator"
 run = """
-uv run python main.py generate \
+uv run dbt-4ps-generator generate \
   --manifest ../_cdm/deltas.manifest.cdm.json \
   --output-directory ../dbt_4ps_staging_package/models/staging/4ps
+git checkout -- ../dbt_4ps_staging_package/models/staging/4ps/_4ps__models.yaml
 """
 
 [tasks.test]
@@ -34,14 +35,34 @@ alias = "format"
 dir = "dbt_4ps_staging_generator"
 run = "uv run ruff format ."
 
+[tasks.typecheck]
+description = "Type-check the generator with ty"
+alias = "types"
+dir = "dbt_4ps_staging_generator"
+run = "uv run ty check"
+
 [tasks.check]
-description = "Full pre-commit gate: lint + format check + tests"
+description = "Full pre-commit gate: lint + format check + types + tests"
 dir = "dbt_4ps_staging_generator"
 run = [
     "uv run ruff check .",
     "uv run ruff format --check .",
+    "uv run ty check",
     "uv run pytest",
 ]
+
+[tasks.build]
+description = "Build the generator wheel + sdist into dist/"
+dir = "dbt_4ps_staging_generator"
+run = "uv build"
+
+[tasks.docs]
+description = "Preview the docs site at localhost:8000"
+run = "uv run --project dbt_4ps_staging_generator --group docs mkdocs serve"
+
+[tasks."docs:build"]
+description = "Build the docs site (strict)"
+run = "uv run --project dbt_4ps_staging_generator --group docs mkdocs build --strict"
 
 [tasks."dbt:parse"]
 description = "Validate the dbt package parses (uses dummy connection env vars)"

@@ -7,10 +7,20 @@ All notable changes to this project are documented here. The format is based on
 
 ### Added
 
+- The generator is now an installable package, `dbt-4ps-generator`, published
+  to PyPI on release (`uvx dbt-4ps-generator`), with a `--version` flag.
+- Documentation site at <https://misja-pronk.github.io/dbt-4ps-staging/>.
+- Version-driven release workflow: bumping the version in
+  `dbt_4ps_staging_generator/pyproject.toml` and merging to `main` publishes to
+  PyPI and creates the tag + GitHub release.
+- `ty` type-checking; builder classes gained precise optional annotations and
+  clear errors when required builder fields are missing.
+- Tests now also run on Python 3.14 in CI.
 - Ruff lint + format for the generator, with a CI job enforcing both.
-- CI job verifying the committed models stay in sync with the generator.
-- `mise` tasks for the common workflows (`test`, `lint`, `fmt`, `check`,
-  `generate`, `dbt:parse`).
+- CI jobs verifying the committed models stay in sync with the generator, the
+  wheel builds and installs, and the docs build strictly.
+- `mise` tasks for the common workflows (`test`, `lint`, `fmt`, `typecheck`,
+  `check`, `generate`, `dbt:parse`, `docs`, `build`).
 - Contributing guide, security policy, issue/PR templates.
 
 ## [0.1.0] - 2026-07-04
