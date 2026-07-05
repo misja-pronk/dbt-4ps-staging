@@ -18,8 +18,8 @@ mise run lint        # ruff check
 mise run fmt         # ruff format
 mise run typecheck   # ty check
 mise run check       # full pre-commit gate
-mise run generate    # regenerate models from the example manifest
-mise run dbt:parse   # validate the dbt package parses
+mise run generate    # regenerate the sample models from the example manifest
+mise run dbt:parse   # validate the example dbt project parses
 mise run docs        # preview this site at localhost:8000
 ```
 
@@ -28,7 +28,7 @@ All of these run in CI on every push/PR.
 ## Layout
 
 - **`dbt_4ps_staging_generator/`** — the CLI, as a `src/dbt_4ps_generator` package: `cdm.py` parses the CDM json, `converters.py` maps CDM to SQL/dbt concepts, `dbt.py` writes the models and schema yaml, `cli.py` is the Typer entry point.
-- **`dbt_4ps_staging_package/`** — the generated dbt package. Never hand-edited.
+- **`example_dbt_project/`** — a minimal example dbt project with 3 sample generated models. The models are never hand-edited; CI regenerates them from `_cdm/` and diffs.
 - **`_cdm/`** — the 3-table example export used by CI as an integration fixture.
 
 ## Releasing

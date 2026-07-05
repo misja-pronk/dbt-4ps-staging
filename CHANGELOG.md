@@ -5,6 +5,16 @@ All notable changes to this project are documented here. The format is based on
 
 ## [Unreleased]
 
+### Changed
+
+- Replaced the full pre-generated 73-model `dbt_4ps_staging_package/` with
+  `example_dbt_project/`, a minimal starter dbt project holding 3 sample models
+  (`payment_terms`, `currency`, `customer`). Because every 4PS Construct
+  environment exports a different set of tables, there's no universal package —
+  copy the example project and regenerate the models for your own tables. CI now
+  regenerates the sample models (including the schema yaml) from `_cdm/` and
+  diffs them against what's committed.
+
 ## [0.1.1] - 2026-07-04
 
 ### Added

@@ -61,6 +61,6 @@ nav:
   - Getting started: getting-started.md
   - Guide:
       - The generator CLI: generator.md
-      - The dbt package: package.md
+      - The example dbt project: example-project.md
       - CDM metadata: cdm-metadata.md
   - Develop: development.md

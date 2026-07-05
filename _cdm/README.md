@@ -29,4 +29,4 @@ uv run dbt-4ps-generator download \
   --output-directory ../_cdm
 ```
 
-Then point `generate` at the downloaded `deltas.manifest.cdm.json` to build staging models for your full table set. The 73 models in [`../dbt_4ps_staging_package`](../dbt_4ps_staging_package/) were generated from a full 4PS Construct export this way.
+Then point `generate` at the downloaded `deltas.manifest.cdm.json` to build staging models for your full table set — write them into a copy of [`../example_dbt_project`](../example_dbt_project/).

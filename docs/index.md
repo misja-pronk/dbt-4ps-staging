@@ -2,7 +2,9 @@
 
 Build a Databricks staging layer for **[4PS Construct](https://www.4ps.nl/)** (Microsoft Dynamics 365 Business Central) data exported with **[bc2adls](https://github.com/Bertverbeek4PS/bc2adls)** — without hand-writing a single staging model.
 
-bc2adls exports Business Central tables as CSV deltas plus [CDM](https://learn.microsoft.com/en-us/common-data-model/) metadata describing every table and column. This project turns that metadata into a complete [dbt](https://www.getdbt.com/) staging package: one streaming table per source table, with typed columns, readable snake_case names, column documentation, and primary-key uniqueness tests.
+bc2adls exports Business Central tables as CSV deltas plus [CDM](https://learn.microsoft.com/en-us/common-data-model/) metadata describing every table and column. **`dbt-4ps-generator`** turns that metadata into [dbt](https://www.getdbt.com/) staging models: one streaming table per source table, with typed columns, readable snake_case names, column documentation, and primary-key uniqueness tests.
+
+Every 4PS Construct environment exports a different set of tables, so there is no one-size-fits-all package — you point the generator at your own CDM export and generate the models for your tables. The repo ships an [example dbt project](example-project.md) with a few sample models as a starting point.
 
 ## How it works
 
@@ -26,11 +28,11 @@ Each generated model reads the CSV deltas for one table with Databricks `READ_FI
 | Directory | Contents |
 |---|---|
 | `dbt_4ps_staging_generator/` | Python CLI that reads a CDM manifest and generates the dbt models |
-| `dbt_4ps_staging_package/` | The generated dbt package: 73 staging models for 4PS Construct |
+| `example_dbt_project/` | A minimal example dbt project with 3 sample models — copy and regenerate for your own tables |
 | `_cdm/` | A 3-table example CDM export to try the generator |
 
 ## Next steps
 
 - [Getting started](getting-started.md) — from bc2adls export to running staging tables
 - [The generator CLI](generator.md) — `generate` and `download` reference
-- [The dbt package](package.md) — configuration and day-to-day use
+- [The example dbt project](example-project.md) — the starter you copy and regenerate into
