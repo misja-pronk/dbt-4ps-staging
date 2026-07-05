@@ -10,14 +10,16 @@
 
 Build a Databricks staging layer for **[4PS Construct](https://www.4ps.nl/)** (Microsoft Dynamics 365 Business Central) data exported with **[bc2adls](https://github.com/Bertverbeek4PS/bc2adls)**.
 
-bc2adls exports Business Central tables as CSV deltas plus [CDM](https://learn.microsoft.com/en-us/common-data-model/) metadata describing every table and column. This repo turns that metadata into a complete [dbt](https://www.getdbt.com/) staging package — one streaming table per source table, with typed columns, readable snake_case names, column documentation, and primary-key uniqueness tests — so you never hand-write staging models again.
+bc2adls exports Business Central tables as CSV deltas plus [CDM](https://learn.microsoft.com/en-us/common-data-model/) metadata describing every table and column. **[`dbt-4ps-generator`](https://pypi.org/project/dbt-4ps-generator/)** turns that metadata into [dbt](https://www.getdbt.com/) staging models — one streaming table per source table, with typed columns, readable snake_case names, column documentation, and primary-key uniqueness tests — so you never hand-write staging models again.
+
+Every 4PS Construct environment exports a different set of tables, so there's no one-size-fits-all package: you point the generator at your own CDM export and generate the models for your tables. The repo ships an [example dbt project](example_dbt_project/) with a few sample models as a starting point to copy and regenerate into.
 
 ## What's in here
 
 | Directory | Contents |
 |---|---|
-| [`dbt_4ps_staging_generator/`](dbt_4ps_staging_generator/) | Python CLI that reads a CDM manifest and generates the dbt models |
-| [`dbt_4ps_staging_package/`](dbt_4ps_staging_package/) | The generated dbt package: 73 staging models for 4PS Construct |
+| [`dbt_4ps_staging_generator/`](dbt_4ps_staging_generator/) | Python CLI (`dbt-4ps-generator`) that reads a CDM manifest and generates the dbt models |
+| [`example_dbt_project/`](example_dbt_project/) | A minimal example dbt project with 3 sample models — copy it and regenerate for your own tables |
 | [`_cdm/`](_cdm/) | Small example CDM export (3 tables) to try the generator — see [`_cdm/README.md`](_cdm/README.md) for how to download your own |
 
 ## How it works
@@ -40,7 +42,7 @@ Each generated model reads the CSV deltas for one table with Databricks `READ_FI
 ## Quickstart
 
 1. Export your Business Central tables with bc2adls to a Unity Catalog volume.
-2. Generate the models (or use the pre-generated package as-is if your table set matches):
+2. Copy the example project and generate your models into it:
 
    ```bash
    uv tool install dbt-4ps-generator     # or run ephemerally with uvx
@@ -48,10 +50,12 @@ Each generated model reads the CSV deltas for one table with Databricks `READ_FI
    export DATABRICKS_HOST=https://<workspace>.azuredatabricks.net
    export DATABRICKS_TOKEN=<token>
    dbt-4ps-generator download --volume-path /Volumes/<catalog>/<schema>/<volume> --output-directory ./cdm
-   dbt-4ps-generator generate --manifest ./cdm/deltas.manifest.cdm.json --output-directory dbt_4ps_staging_package/models/staging/4ps
+
+   cp -r example_dbt_project my_4ps_dbt
+   dbt-4ps-generator generate --manifest ./cdm/deltas.manifest.cdm.json --output-directory my_4ps_dbt/models/staging/4ps
    ```
 
-3. Configure and run the dbt package — see [dbt_4ps_staging_package/README.md](dbt_4ps_staging_package/README.md).
+3. Configure and run the dbt project — see [example_dbt_project/README.md](example_dbt_project/README.md).
 
 Full walkthrough in the [docs](https://misja-pronk.github.io/dbt-4ps-staging/getting-started/).
 

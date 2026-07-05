@@ -27,20 +27,23 @@ dbt-4ps-generator download \
 
 ## 3. Generate the models
 
+Copy the [example project](example-project.md) as your starting point, then generate your models into it — this replaces the sample models with your full table set:
+
 ```sh
+cp -r example_dbt_project my_4ps_dbt
 dbt-4ps-generator generate \
   --manifest ./cdm/deltas.manifest.cdm.json \
-  --output-directory dbt_4ps_staging_package/models/staging/4ps
+  --output-directory my_4ps_dbt/models/staging/4ps
 ```
 
-This writes one `stg_4ps__<table>.sql` per entity plus a `_4ps__models.yaml` with descriptions and primary-key uniqueness tests. If your table set matches the 73 tables in the bundled package, you can skip this step and use the package as-is.
+This writes one `stg_4ps__<table>.sql` per entity plus a `_4ps__models.yaml` with descriptions and primary-key uniqueness tests.
 
 ## 4. Configure and run dbt
 
-Point the package at your environment and run it — see [the dbt package](package.md) for the vars and environment variables:
+Point the project at your environment and run it — see [the example dbt project](example-project.md) for the vars and environment variables:
 
 ```sh
-cd dbt_4ps_staging_package
+cd my_4ps_dbt
 export DBT_DATABRICKS_HOST=<workspace>.azuredatabricks.net
 export DBT_DATABRICKS_HTTP_PATH=/sql/1.0/warehouses/<warehouse-id>
 export DBT_DATABRICKS_CATALOG=<catalog>

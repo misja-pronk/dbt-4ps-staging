@@ -32,4 +32,4 @@ CI regenerates these entities on every push and diffs the output against the com
 
 ## Getting your own
 
-Use the [`download` command](generator.md#download) to pull the metadata for your full table set from the Unity Catalog volume bc2adls exports to. The 73 models in the bundled package were generated from a full 4PS Construct export this way.
+Use the [`download` command](generator.md#download) to pull the metadata for your full table set from the Unity Catalog volume bc2adls exports to, then [generate](generator.md#generate) the staging models for your tables.

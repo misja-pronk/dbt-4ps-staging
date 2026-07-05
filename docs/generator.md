@@ -7,7 +7,7 @@
 ```sh
 dbt-4ps-generator generate \
   --manifest _cdm/deltas.manifest.cdm.json \
-  --output-directory dbt_4ps_staging_package/models/staging/4ps
+  --output-directory example_dbt_project/models/staging/4ps
 ```
 
 For every entity in the manifest it writes:

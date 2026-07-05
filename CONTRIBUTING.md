@@ -22,8 +22,8 @@ mise run lint        # ruff check
 mise run fmt         # ruff format
 mise run typecheck   # ty check
 mise run check       # full pre-commit gate: lint + format check + types + tests
-mise run generate    # regenerate models from the example manifest in _cdm/
-mise run dbt:parse   # validate the dbt package parses
+mise run generate    # regenerate the sample models from the example manifest in _cdm/
+mise run dbt:parse   # validate the example dbt project parses
 mise run docs        # preview the docs site at localhost:8000
 mise run build       # build the generator wheel + sdist
 ```
@@ -40,10 +40,11 @@ opening a PR. New behaviour should come with a test.
   package. `cdm.py` parses the CDM json, `converters.py` maps CDM to SQL/dbt
   concepts, `dbt.py` writes the models and schema yaml, `cli.py` is the Typer
   entry point.
-- **`dbt_4ps_staging_package/`** — the generated dbt package. Don't hand-edit
-  the models under `models/staging/4ps/` — change the generator and regenerate.
+- **`example_dbt_project/`** — a minimal example dbt project with 3 sample
+  generated models. Don't hand-edit the models under `models/staging/4ps/` —
+  change the generator and regenerate (`mise run generate`).
 - **`_cdm/`** — a 3-table example export used by CI to verify the committed
-  models stay in sync with the generator.
+  sample models stay in sync with the generator.
 
 ## Commits & PRs
 

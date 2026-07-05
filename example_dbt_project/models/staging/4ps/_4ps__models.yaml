@@ -1,0 +1,591 @@
+version: 2
+models:
+-  name: stg_4ps__payment_terms
+   description: Represents the table Payment Terms
+   config:
+      database: '{{ var("destination")["database"] }}'
+      schema: '{{ var("destination")["schema"] }}'
+      materialized: streaming_table
+   columns:
+   -  name: code
+      description: Code
+   -  name: due_date_calculation
+      description: Due Date Calculation
+   -  name: discount_date_calculation
+      description: Discount Date Calculation
+   -  name: discount
+      description: Discount %
+   -  name: description
+      description: Description
+   -  name: calc_pmt_discon_cr_memos
+      description: Calc. Pmt. Disc. on Cr. Memos
+   -  name: last_modified_date_time
+      description: Last Modified Date Time
+   -  name: coupledto_crm
+      description: Coupled to CRM
+   -  name: discount_date_calculation_2
+      description: Discount Date Calculation 2
+   -  name: discount_2
+      description: Discount % 2
+   -  name: discount_date_calculation_3
+      description: Discount Date Calculation 3
+   -  name: discount_3
+      description: Discount % 3
+   -  name: timestamp
+      description: timestamp
+   -  name: system_id
+      description: $systemId
+   -  name: system_created_at
+      description: SystemCreatedAt
+   -  name: system_created_by
+      description: SystemCreatedBy
+   -  name: system_modified_at
+      description: SystemModifiedAt
+   -  name: system_modified_by
+      description: SystemModifiedBy
+   -  name: company
+      description: $Company
+   data_tests:
+   -  dbt_utils.unique_combination_of_columns:
+         combination_of_columns:
+         - code
+-  name: stg_4ps__currency
+   description: Represents the table Currency
+   config:
+      database: '{{ var("destination")["database"] }}'
+      schema: '{{ var("destination")["schema"] }}'
+      materialized: streaming_table
+   columns:
+   -  name: code
+      description: Code
+   -  name: last_date_modified
+      description: Last Date Modified
+   -  name: last_date_adjusted
+      description: Last Date Adjusted
+   -  name: iso_code
+      description: ISO Code
+   -  name: iso_numeric_code
+      description: ISO Numeric Code
+   -  name: unrealized_gains_acc
+      description: Unrealized Gains Acc.
+   -  name: realized_gains_acc
+      description: Realized Gains Acc.
+   -  name: unrealized_losses_acc
+      description: Unrealized Losses Acc.
+   -  name: realized_losses_acc
+      description: Realized Losses Acc.
+   -  name: invoice_rounding_precision
+      description: Invoice Rounding Precision
+   -  name: invoice_rounding_type
+      description: Invoice Rounding Type
+   -  name: amount_rounding_precision
+      description: Amount Rounding Precision
+   -  name: unit_amount_rounding_precision
+      description: Unit-Amount Rounding Precision
+   -  name: description
+      description: Description
+   -  name: amount_decimal_places
+      description: Amount Decimal Places
+   -  name: unit_amount_decimal_places
+      description: Unit-Amount Decimal Places
+   -  name: realized_gl_gains_account
+      description: Realized G/L Gains Account
+   -  name: realized_gl_losses_account
+      description: Realized G/L Losses Account
+   -  name: appln_rounding_precision
+      description: Appln. Rounding Precision
+   -  name: emu_currency
+      description: EMU Currency
+   -  name: currency_factor
+      description: Currency Factor
+   -  name: residual_gains_account
+      description: Residual Gains Account
+   -  name: residual_losses_account
+      description: Residual Losses Account
+   -  name: conv_lcy_rndg_debit_acc
+      description: Conv. LCY Rndg. Debit Acc.
+   -  name: conv_lcy_rndg_credit_acc
+      description: Conv. LCY Rndg. Credit Acc.
+   -  name: max_vat_difference_allowed
+      description: Max. VAT Difference Allowed
+   -  name: vat_rounding_type
+      description: VAT Rounding Type
+   -  name: payment_tolerance
+      description: Payment Tolerance %
+   -  name: max_payment_tolerance_amount
+      description: Max. Payment Tolerance Amount
+   -  name: symbol
+      description: Symbol
+   -  name: last_modified_date_time
+      description: Last Modified Date Time
+   -  name: coupledto_crm
+      description: Coupled to CRM
+   -  name: timestamp
+      description: timestamp
+   -  name: system_id
+      description: $systemId
+   -  name: system_created_at
+      description: SystemCreatedAt
+   -  name: system_created_by
+      description: SystemCreatedBy
+   -  name: system_modified_at
+      description: SystemModifiedAt
+   -  name: system_modified_by
+      description: SystemModifiedBy
+   -  name: company
+      description: $Company
+   data_tests:
+   -  dbt_utils.unique_combination_of_columns:
+         combination_of_columns:
+         - code
+-  name: stg_4ps__customer
+   description: Represents the table Customer
+   config:
+      database: '{{ var("destination")["database"] }}'
+      schema: '{{ var("destination")["schema"] }}'
+      materialized: streaming_table
+   columns:
+   -  name: 'no'
+      description: No.
+   -  name: name
+      description: Name
+   -  name: search_name
+      description: Search Name
+   -  name: name_2
+      description: Name 2
+   -  name: address
+      description: Address
+   -  name: address_2
+      description: Address 2
+   -  name: city
+      description: City
+   -  name: contact
+      description: Contact
+   -  name: phone_no
+      description: Phone No.
+   -  name: telex_no
+      description: Telex No.
+   -  name: document_sending_profile
+      description: Document Sending Profile
+   -  name: shipto_code
+      description: Ship-to Code
+   -  name: our_account_no
+      description: Our Account No.
+   -  name: territory_code
+      description: Territory Code
+   -  name: global_dimension_1_code
+      description: Global Dimension 1 Code
+   -  name: global_dimension_2_code
+      description: Global Dimension 2 Code
+   -  name: chain_name
+      description: Chain Name
+   -  name: budgeted_amount
+      description: Budgeted Amount
+   -  name: credit_limit_lcy
+      description: Credit Limit (LCY)
+   -  name: customer_posting_group
+      description: Customer Posting Group
+   -  name: currency_code
+      description: Currency Code
+   -  name: customer_price_group
+      description: Customer Price Group
+   -  name: language_code
+      description: Language Code
+   -  name: registration_number
+      description: Registration Number
+   -  name: statistics_group
+      description: Statistics Group
+   -  name: payment_terms_code
+      description: Payment Terms Code
+   -  name: fin_charge_terms_code
+      description: Fin. Charge Terms Code
+   -  name: salesperson_code
+      description: Salesperson Code
+   -  name: shipment_method_code
+      description: Shipment Method Code
+   -  name: shipping_agent_code
+      description: Shipping Agent Code
+   -  name: placeof_export
+      description: Place of Export
+   -  name: invoice_disc_code
+      description: Invoice Disc. Code
+   -  name: customer_disc_group
+      description: Customer Disc. Group
+   -  name: country_region_code
+      description: Country/Region Code
+   -  name: collection_method
+      description: Collection Method
+   -  name: amount
+      description: Amount
+   -  name: blocked
+      description: Blocked
+   -  name: invoice_copies
+      description: Invoice Copies
+   -  name: last_statement_no
+      description: Last Statement No.
+   -  name: print_statements
+      description: Print Statements
+   -  name: billto_customer_no
+      description: Bill-to Customer No.
+   -  name: priority
+      description: Priority
+   -  name: payment_method_code
+      description: Payment Method Code
+   -  name: format_region
+      description: Format Region
+   -  name: last_modified_date_time
+      description: Last Modified Date Time
+   -  name: last_date_modified
+      description: Last Date Modified
+   -  name: application_method
+      description: Application Method
+   -  name: prices_including_vat
+      description: Prices Including VAT
+   -  name: location_code
+      description: Location Code
+   -  name: fax_no
+      description: Fax No.
+   -  name: telex_answer_back
+      description: Telex Answer Back
+   -  name: vat_registration_no
+      description: VAT Registration No.
+   -  name: combine_shipments
+      description: Combine Shipments
+   -  name: gen_bus_posting_group
+      description: Gen. Bus. Posting Group
+   -  name: gln
+      description: GLN
+   -  name: post_code
+      description: Post Code
+   -  name: county
+      description: County
+   -  name: eori_number
+      description: EORI Number
+   -  name: use_gl_nin_electronic_document
+      description: Use GLN in Electronic Document
+   -  name: e_mail
+      description: E-Mail
+   -  name: home_page
+      description: Home Page
+   -  name: reminder_terms_code
+      description: Reminder Terms Code
+   -  name: no_series
+      description: No. Series
+   -  name: tax_area_code
+      description: Tax Area Code
+   -  name: tax_liable
+      description: Tax Liable
+   -  name: vat_bus_posting_group
+      description: VAT Bus. Posting Group
+   -  name: reserve
+      description: Reserve
+   -  name: block_payment_tolerance
+      description: Block Payment Tolerance
+   -  name: ic_partner_code
+      description: IC Partner Code
+   -  name: prepayment
+      description: Prepayment %
+   -  name: partner_type
+      description: Partner Type
+   -  name: intrastat_partner_type
+      description: Intrastat Partner Type
+   -  name: excludefrom_pmt_practices
+      description: Exclude from Pmt. Practices
+   -  name: privacy_blocked
+      description: Privacy Blocked
+   -  name: disable_searchby_name
+      description: Disable Search by Name
+   -  name: allow_multiple_posting_groups
+      description: Allow Multiple Posting Groups
+   -  name: preferred_bank_account_code
+      description: Preferred Bank Account Code
+   -  name: coupledto_crm
+      description: Coupled to CRM
+   -  name: cash_flow_payment_terms_code
+      description: Cash Flow Payment Terms Code
+   -  name: default_trans_type
+      description: Default Trans. Type
+   -  name: default_trans_type_return
+      description: Default Trans. Type - Return
+   -  name: def_transport_method
+      description: Def. Transport Method
+   -  name: primary_contact_no
+      description: Primary Contact No.
+   -  name: contact_type
+      description: Contact Type
+   -  name: mobile_phone_no
+      description: Mobile Phone No.
+   -  name: responsibility_center
+      description: Responsibility Center
+   -  name: shipping_advice
+      description: Shipping Advice
+   -  name: shipping_time
+      description: Shipping Time
+   -  name: shipping_agent_service_code
+      description: Shipping Agent Service Code
+   -  name: service_zone_code
+      description: Service Zone Code
+   -  name: price_calculation_method
+      description: Price Calculation Method
+   -  name: allow_line_disc
+      description: Allow Line Disc.
+   -  name: base_calendar_code
+      description: Base Calendar Code
+   -  name: copy_sellto_addrto_qte_from
+      description: Copy Sell-to Addr. to Qte From
+   -  name: validate_eu_vat_reg_no
+      description: Validate EU Vat Reg. No.
+   -  name: currency_id
+      description: Currency Id
+   -  name: payment_terms_id
+      description: Payment Terms Id
+   -  name: shipment_method_id
+      description: Shipment Method Id
+   -  name: payment_method_id
+      description: Payment Method Id
+   -  name: tax_area_id
+      description: Tax Area ID
+   -  name: contact_id
+      description: Contact ID
+   -  name: contact_graph_id
+      description: Contact Graph Id
+   -  name: transaction_mode_code
+      description: Transaction Mode Code
+   -  name: surcharge_labor
+      description: Surcharge % Labor
+   -  name: surcharge_material
+      description: Surcharge % Material
+   -  name: surcharge_subcontr
+      description: Surcharge % Subcontr.
+   -  name: surcharge_plant
+      description: Surcharge % Plant
+   -  name: surcharge_sundry
+      description: Surcharge % Sundry
+   -  name: surcharge_labor_est
+      description: Surcharge % Labor (Est)
+   -  name: surcharge_material_est
+      description: Surcharge % Material (Est)
+   -  name: surcharge_subcontr_est
+      description: Surcharge % Subcontr. (Est)
+   -  name: surcharge_plant_est
+      description: Surcharge % Plant (Est)
+   -  name: surcharge_sundry_est
+      description: Surcharge % Sundry (Est)
+   -  name: project_settlement_method
+      description: Project Settlement Method
+   -  name: project_contract_type
+      description: Project Contract Type
+   -  name: balance_document_date_lcy
+      description: Balance Document Date LCY
+   -  name: credit_insurance
+      description: Credit Insurance
+   -  name: credit_insurance_end_date
+      description: Credit Insurance End Date
+   -  name: credit_insurer_id
+      description: Credit Insurer ID
+   -  name: city_coc
+      description: City COC
+   -  name: coc_registration_no
+      description: COC Registration No.
+   -  name: due_date_coc_statement
+      description: Due Date COC Statement
+   -  name: coc_location_no
+      description: COC Location No.
+   -  name: vat_prod_posting_group
+      description: VAT Prod. Posting Group
+   -  name: customerfolder
+      description: Customer folder
+   -  name: cost_object
+      description: Cost Object
+   -  name: direct_delivery
+      description: Direct Delivery
+   -  name: rate_group
+      description: Rate Group
+   -  name: extended_vat_determination
+      description: Extended VAT Determination
+   -  name: phone_no_2
+      description: Phone No. 2
+   -  name: collect_cost_plus_entry
+      description: Collect Cost Plus Entry
+   -  name: cost_plus_sales_prices
+      description: Cost Plus Sales Prices
+   -  name: cost_plus_sales_prices_from
+      description: Cost Plus Sales Prices From
+   -  name: quantitieson_settlement_sheet
+      description: Quantities on Settlement Sheet
+   -  name: total_lineon_settlement_sheet
+      description: Total Line on Settlement Sheet
+   -  name: invoice_text_installments
+      description: Invoice Text Installments
+   -  name: invoice_text_cost_plus
+      description: Invoice Text Cost Plus
+   -  name: labor
+      description: '% Labor'
+   -  name: to_b_account
+      description: '% to B Account'
+   -  name: item_price_cost_plus_project
+      description: Item Price Cost Plus Project
+   -  name: item_price_estimate
+      description: Item Price Estimate
+   -  name: item_price_sales_line
+      description: Item Price Sales Line
+   -  name: item_price_unit_price
+      description: Item Price Unit Price
+   -  name: invoice_layout_code
+      description: Invoice Layout Code
+   -  name: default_collect_invoices_by
+      description: Default Collect Invoices By
+   -  name: customer_template_code
+      description: Customer Template Code
+   -  name: customer_type
+      description: Customer Type
+   -  name: xml_export
+      description: XML-Export
+   -  name: plant_depot_logistics
+      description: Plant Depot Logistics
+   -  name: location_code_logistics
+      description: Location Code Logistics
+   -  name: one_locationper_plant_invoice
+      description: One Location per Plant Invoice
+   -  name: estimate_source
+      description: Estimate Source
+   -  name: summary_cost
+      description: Summary (Cost)
+   -  name: summary_sales
+      description: Summary (Sales)
+   -  name: transaction_type
+      description: Transaction Type
+   -  name: transaction_specification
+      description: Transaction Specification
+   -  name: transport_method
+      description: Transport Method
+   -  name: exit_point
+      description: Exit Point
+   -  name: service_warranty_code
+      description: Service Warranty Code
+   -  name: e_mail_invoices
+      description: E-Mail (Invoices)
+   -  name: invoiceper_e_mail
+      description: Invoice per E-Mail
+   -  name: electronic_invoicing
+      description: Electronic Invoicing
+   -  name: e_mail_reminders
+      description: E-Mail (Reminders)
+   -  name: reminderper_e_mail
+      description: Reminder per E-Mail
+   -  name: e_mail_shipments
+      description: E-Mail (Shipments)
+   -  name: shipmentper_e_mail
+      description: Shipment per E-Mail
+   -  name: e_mail_order_confirmations
+      description: E-Mail (Order Confirmations)
+   -  name: order_confirmationper_e_mail
+      description: Order Confirmation per E-Mail
+   -  name: combine_e_mail_attachments
+      description: Combine E-Mail Attachments
+   -  name: plant_invoice_method
+      description: Plant Invoice Method
+   -  name: government_id
+      description: Government ID
+   -  name: reference_date_item
+      description: Reference Date (Item)
+   -  name: purch_discount_term_group
+      description: Purch Discount Term Group
+   -  name: sales_discount_term_group
+      description: Sales Discount Term Group
+   -  name: exportto_fsa
+      description: Export to FSA
+   -  name: date_time_exportto_fsa
+      description: Date/Time Export to FSA
+   -  name: activein_fsa
+      description: Active in FSA
+   -  name: modifiedby
+      description: Modified by
+   -  name: date_created
+      description: Date Created
+   -  name: createdby
+      description: Created by
+   -  name: sales_representative_code
+      description: Sales Representative Code
+   -  name: credit_restriction
+      description: Credit Restriction
+   -  name: fixed_price_contract_glazing
+      description: Fixed Price Contract (Glazing)
+   -  name: collect_so_invoices_by
+      description: Collect SO Invoices By
+   -  name: send_mail_so_status_update
+      description: Send Mail SO Status Update
+   -  name: send_mail_save_so_work_sheet
+      description: Send Mail/Save SO Work Sheet
+   -  name: so_appointment_letter_code_obs
+      description: SO Appointment Letter Code OBS
+   -  name: collect_project_invoices_by
+      description: Collect Project Invoices By
+   -  name: collect_rsrc_req_invoicesby
+      description: Collect Rsrc. Req. Invoices by
+   -  name: use_billtoas_sellto_custom
+      description: Use Bill-to as Sell-to Custom.
+   -  name: calculate_b_amountsbasedon
+      description: Calculate B Amounts based on
+   -  name: invoice_period_coll_list
+      description: Invoice Period (Coll. List)
+   -  name: min_inv_amount_coll_list
+      description: Min. Inv. Amount (Coll. List)
+   -  name: maint_appointmentsby_obs
+      description: Maint. Appointments by OBS
+   -  name: eori_no
+      description: EORI No.
+   -  name: travel_cost_code_service
+      description: Travel Cost Code (Service)
+   -  name: generic_filter
+      description: Generic Filter
+   -  name: price_book_type
+      description: Price Book Type
+   -  name: price_book_code
+      description: Price Book Code
+   -  name: price_book_index_date
+      description: Price Book Index Date
+   -  name: unit_price_set
+      description: Unit Price Set
+   -  name: unit_price_status
+      description: Unit Price Status
+   -  name: initial_minutes_working_hours
+      description: Initial Minutes Working Hours
+   -  name: round_working_hourson_minutes
+      description: Round Working Hours on Minutes
+   -  name: round_travel_hourson_minutes
+      description: Round Travel Hours on Minutes
+   -  name: use_bill_to_custfor_pr_book
+      description: Use Bill-To Cust. for Pr. Book
+   -  name: customer_relation_1_no
+      description: Customer Relation 1 No.
+   -  name: customer_relation_2_no
+      description: Customer Relation 2 No.
+   -  name: e_mail_2
+      description: E-Mail 2
+   -  name: file_storage_type
+      description: File Storage Type
+   -  name: replan_appoint_allowed_serv
+      description: Replan Appoint. Allowed (Serv)
+   -  name: el_inv_ex_insbou_serv_ord
+      description: El. Inv. Ex INSBOU Serv. Ord.
+   -  name: elec_inv_insbou_serv_ord
+      description: Elec. Inv. INSBOU Serv. Ord.
+   -  name: timestamp
+      description: timestamp
+   -  name: system_id
+      description: $systemId
+   -  name: system_created_at
+      description: SystemCreatedAt
+   -  name: system_created_by
+      description: SystemCreatedBy
+   -  name: system_modified_at
+      description: SystemModifiedAt
+   -  name: system_modified_by
+      description: SystemModifiedBy
+   -  name: company
+      description: $Company
+   data_tests:
+   -  dbt_utils.unique_combination_of_columns:
+         combination_of_columns:
+         - 'no'

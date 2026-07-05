@@ -9,13 +9,12 @@ UV_PROJECT_ENVIRONMENT = ".venv"
 # Run with `mise run <name>` (or `mise <name>`); list them with `mise tasks`.
 
 [tasks.generate]
-description = "Regenerate the example dbt models (restores the schema yaml — the committed one covers all 73 tables, the example manifest only 3)"
+description = "Regenerate the sample models in example_dbt_project from the example CDM manifest"
 dir = "dbt_4ps_staging_generator"
 run = """
 uv run dbt-4ps-generator generate \
   --manifest ../_cdm/deltas.manifest.cdm.json \
-  --output-directory ../dbt_4ps_staging_package/models/staging/4ps
-git checkout -- ../dbt_4ps_staging_package/models/staging/4ps/_4ps__models.yaml
+  --output-directory ../example_dbt_project/models/staging/4ps
 """
 
 [tasks.test]
@@ -65,8 +64,8 @@ description = "Build the docs site (strict)"
 run = "uv run --project dbt_4ps_staging_generator --group docs mkdocs build --strict"
 
 [tasks."dbt:parse"]
-description = "Validate the dbt package parses (uses dummy connection env vars)"
-dir = "dbt_4ps_staging_package"
+description = "Validate the example dbt project parses (uses dummy connection env vars)"
+dir = "example_dbt_project"
 env = { DBT_DATABRICKS_HOST = "dummy.azuredatabricks.net", DBT_DATABRICKS_HTTP_PATH = "/sql/1.0/warehouses/dummy", DBT_DATABRICKS_CATALOG = "dummy", DBT_DATABRICKS_TOKEN = "dummy" }
 run = [
     "uv run dbt deps --profiles-dir .",

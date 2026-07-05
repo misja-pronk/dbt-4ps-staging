@@ -33,7 +33,7 @@ Generate the models:
 ```bash
 dbt-4ps-generator generate \
   --manifest ../_cdm/deltas.manifest.cdm.json \
-  --output-directory ../dbt_4ps_staging_package/models/staging/4ps
+  --output-directory ../example_dbt_project/models/staging/4ps
 ```
 
 Options (see `--help`): `--model-prefix` (default `stg_4ps__`), `--schema-prefix` (default `_4ps__`), and `--no-file-metadata-column` to omit the `_metadata` source-file column.

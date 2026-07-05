@@ -77,11 +77,11 @@ jobs:
         run: uv run --project dbt_4ps_staging_generator --group docs mkdocs build --strict
 
   dbt-parse:
-    name: dbt parse
+    name: example project parses
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: dbt_4ps_staging_package
+        working-directory: example_dbt_project
     env:
       DBT_DATABRICKS_HOST: dummy.azuredatabricks.net
       DBT_DATABRICKS_HTTP_PATH: /sql/1.0/warehouses/dummy
@@ -97,7 +97,7 @@ jobs:
       - run: uv run dbt parse --profiles-dir .
 
   regeneration-in-sync:
-    name: generated models in sync
+    name: sample models in sync
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -110,8 +110,8 @@ jobs:
           uv run dbt-4ps-generator generate \
             --manifest ../_cdm/deltas.manifest.cdm.json \
             --output-directory /tmp/regenerated
-      - name: Compare against the committed models
+      - name: Compare against the committed sample models
         run: |
-          for f in /tmp/regenerated/*.sql; do
-            diff "$f" "dbt_4ps_staging_package/models/staging/4ps/$(basename "$f")"
+          for f in /tmp/regenerated/*; do
+            diff "$f" "example_dbt_project/models/staging/4ps/$(basename "$f")"
           done
